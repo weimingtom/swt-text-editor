@@ -4,5 +4,8 @@
     <dependencies>
         <dependency org="commons-io" name="commons-io" rev="2.1"/>
         <dependency org="log4j" name="log4j" rev="1.2.16"/>
+        <exclude org="javax.activation" />
+        <exclude org="javax.mail" />
+        <exclude org="org.apache.geronimo.specs" />
     </dependencies>
 </ivy-module>

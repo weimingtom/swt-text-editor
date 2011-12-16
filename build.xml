@@ -28,8 +28,14 @@
     <property name="encoding" value="UTF-8"/>
     <property name="jar.prefix" value="simple_edit"/>
 
+    <fileset dir="${basedir}/lib" id="classpath.files">
+        <exclude name="*-javadoc.jar"/>
+        <exclude name="*-sources.jar"/>
+        <include name="*.jar"/>
+    </fileset>
+
     <path id="lib.dependencies">
-        <fileset dir="${basedir}/lib" includes="*.jar"/>
+        <fileset refid="classpath.files"/>
     </path>
 
     <path id="lib.swt-linux-32">
@@ -242,8 +248,8 @@
             <restrict>
                 <archives>
                     <zips>
-                        <fileset dir="lib" includes="*.jar"/>
-                        <fileset dir="lib/swt" includes="swt-${target.platform}-${target.architecture}.jar"/>
+                        <fileset refid="classpath.files"/>
+                        <fileset dir="${basedir}/lib/swt" includes="swt-${target.platform}-${target.architecture}.jar"/>
                     </zips>
                 </archives>
             </restrict>
