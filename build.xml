@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="simpleswttexteditor" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="lib/antlib/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant">
+        <classpath>
+            <pathelement location="lib/antlib/ivy-2.2.0.jar"/>
+        </classpath>
+    </taskdef>
+
+    <property name="version" value="0.1"/>
+
+    <!-- Compiler options -->
+
+    <property name="source.version" value="1.6"/>
+    <property name="target.version" value="1.6"/>
+
+
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="resources.dir" value="${basedir}/resources"/>
+    <property name="output.dir" value="${basedir}/target/classes"/>
+    <property name="package.dir" value="${basedir}/packages"/>
+    <property name="encoding" value="UTF-8"/>
+    <property name="jar.prefix" value="simple_edit"/>
+
+    <path id="lib.dependencies">
+        <fileset dir="${basedir}/lib" includes="*.jar"/>
+    </path>
+
+    <path id="lib.swt-linux-32">
+        <fileset dir="${basedir}/lib/swt">
+            <include name="swt-linux-32.jar"/>
+        </fileset>
+    </path>
+
+    <path id="lib.swt-linux-64">
+        <fileset dir="${basedir}/lib/swt">
+            <include name="swt-linux-64.jar"/>
+        </fileset>
+    </path>
+
+    <path id="lib.swt-win-32">
+        <fileset dir="${basedir}/lib/swt">
+            <include name="swt-win-32.jar"/>
+        </fileset>
+    </path>
+
+    <path id="lib.swt-win-64">
+        <fileset dir="${basedir}/lib/swt">
+            <include name="swt-win-64.jar"/>
+        </fileset>
+    </path>
+
+    <path id="lib.swt-macosx_cocoa-32">
+        <fileset dir="${basedir}/lib/swt">
+            <include name="swt-macosx_cocoa-32.jar"/>
+        </fileset>
+    </path>
+
+    <path id="lib.swt-macosx_cocoa-64">
+        <fileset dir="${basedir}/lib/swt">
+            <include name="swt-macosx_cocoa-64.jar"/>
+        </fileset>
+    </path>
+
+    <path id="lib.swt-macosx_carbon-32">
+        <fileset dir="${basedir}/lib/swt">
+            <include name="swt-macosx_carbon-32.jar"/>
+        </fileset>
+    </path>
+
+    <target name="retrieve" description="retrieve module dependencies">
+        <ivy:retrieve/>
+    </target>
+
+    <target name="clean" description="clean compiled classes">
+        <echo>Cleaning up...</echo>
+        <delete dir="${output.dir}"/>
+        <echo>Clean up completed.</echo>
+    </target>
+
+    <target name="pre-compile" description="create directory for compiled classes">
+        <echo>Preparing for compilation...</echo>
+        <mkdir dir="${output.dir}"/>
+        <echo>Preparation for compilation done.</echo>
+    </target>
+
+    <target name="compile" depends="retrieve,pre-compile" description="compile classes">
+        <echo>Compiling for ${target.platform}-${target.architecture}...</echo>
+        <javac destdir="${output.dir}"
+               source="${source.version}" target="${target.version}">
+            <src path="${src.dir}"/>
+            <classpath refid="lib.swt-${target.platform}-${target.architecture}"/>
+            <classpath refid="lib.dependencies"/>
+        </javac>
+        <copy todir="${output.dir}">
+            <fileset dir="${resources.dir}">
+                <include name="*"/>
+            </fileset>
+        </copy>
+        <echo>Compilation for ${target.platform}-${target.architecture} done.</echo>
+    </target>
+
+    <target name="linux-32" description="set variable - used for build(shouldn't be called explicitly)">
+        <echo>Defining variables for linux-32 target...</echo>
+        <var name="target.platform" value="linux"/>
+        <var name="target.architecture" value="32"/>
+        <echo>Definition of variables for linux-32 target done.</echo>
+    </target>
+
+    <target name="linux-64" description="set variable - used for build(shouldn't be called explicitly)">
+        <echo>Defining variables for linux-64 target...</echo>
+        <var name="target.platform" value="linux"/>
+        <var name="target.architecture" value="64"/>
+        <echo>Definition of variables for linux-64 target done.</echo>
+    </target>
+
+    <target name="win-32" description="set variable - used for build(shouldn't be called explicitly)">
+        <echo>Defining variables for win-32 target...</echo>
+        <var name="target.platform" value="win"/>
+        <var name="target.architecture" value="32"/>
+        <echo>Definition of variables for win-32 target done.</echo>
+    </target>
+
+    <target name="win-64" description="set variable - used for build(shouldn't be called explicitly)">
+        <echo>Defining variables for win-64 target...</echo>
+        <var name="target.platform" value="win"/>
+        <var name="target.architecture" value="64"/>
+        <echo>Definition of variables for win-64 target done.</echo>
+    </target>
+
+    <target name="macosx_cocoa-32" description="set variable - used for build(shouldn't be called explicitly)">
+        <echo>Defining variables for win-32 target...</echo>
+        <var name="target.platform" value="macosx_cocoa"/>
+        <var name="target.architecture" value="32"/>
+        <echo>Definition of variables for win-32 target done.</echo>
+    </target>
+
+    <target name="macosx_cocoa-64" description="set variable - used for build(shouldn't be called explicitly)">
+        <echo>Defining variables for win-64 target...</echo>
+        <var name="target.platform" value="macosx_cocoa"/>
+        <var name="target.architecture" value="64"/>
+        <echo>Definition of variables for win-64 target done.</echo>
+    </target>
+
+    <target name="macosx_carbon-32" description="set variable - used for build(shouldn't be called explicitly)">
+        <echo>Defining variables for win-32 target...</echo>
+        <var name="target.platform" value="macosx_carbon"/>
+        <var name="target.architecture" value="32"/>
+        <echo>Definition of variables for win-32 target done.</echo>
+    </target>
+
+    <target name="build.all"
+            depends="build.linux-32,build.linux-64,build.win-32,build.win-64,
+            build.macosx_cocoa-32,build.macosx_cocoa-64,build.macosx_carbon-32"
+            description="create packages for all supported platforms"/>
+
+    <target name="build.linux-32" depends="linux-32,packages.dir.remove,packages.dir.create"
+            description="build package for linux-32">
+        <sequential>
+            <antcall target="clean" inheritall="true"/>
+            <antcall target="compile" inheritall="true"/>
+            <antcall target="package.create" inheritall="true"/>
+        </sequential>
+    </target>
+
+    <target name="build.linux-64" depends="linux-64,packages.dir.remove,packages.dir.create"
+            description="build package for linux-64">
+        <sequential>
+            <antcall target="clean" inheritall="true"/>
+            <antcall target="compile" inheritall="true"/>
+            <antcall target="package.create" inheritall="true"/>
+        </sequential>
+    </target>
+
+    <target name="build.win-32" depends="win-32,packages.dir.remove,packages.dir.create"
+            description="build package for win-32">
+        <sequential>
+            <antcall target="clean" inheritall="true"/>
+            <antcall target="compile" inheritall="true"/>
+            <antcall target="package.create" inheritall="true"/>
+        </sequential>
+    </target>
+
+    <target name="build.win-64" depends="win-64,packages.dir.remove,packages.dir.create"
+            description="build package for win-64">
+        <sequential>
+            <antcall target="clean" inheritall="true"/>
+            <antcall target="compile" inheritall="true"/>
+            <antcall target="package.create" inheritall="true"/>
+        </sequential>
+    </target>
+
+    <target name="build.macosx_cocoa-32" depends="macosx_cocoa-32,packages.dir.remove,packages.dir.create"
+            description="build package for macosx_cocoa-32">
+        <sequential>
+            <antcall target="clean" inheritall="true"/>
+            <antcall target="compile" inheritall="true"/>
+            <antcall target="package.create" inheritall="true"/>
+        </sequential>
+    </target>
+
+    <target name="build.macosx_cocoa-64" depends="macosx_cocoa-64,packages.dir.remove,packages.dir.create"
+            description="build package for macosx_cocoa-64">
+        <sequential>
+            <antcall target="clean" inheritall="true"/>
+            <antcall target="compile" inheritall="true"/>
+            <antcall target="package.create" inheritall="true"/>
+        </sequential>
+    </target>
+
+    <target name="build.macosx_carbon-32" depends="macosx_carbon-32,packages.dir.remove,packages.dir.create"
+            description="build package for macosx_carbon-32">
+        <sequential>
+            <antcall target="clean" inheritall="true"/>
+            <antcall target="compile" inheritall="true"/>
+            <antcall target="package.create" inheritall="true"/>
+        </sequential>
+    </target>
+
+    <target name="packages.dir.remove" description="remove directory for packages">
+        <echo>Deleting package dir...</echo>
+        <delete dir="${package.dir}"/>
+        <echo>Deletion of package dir done.</echo>
+    </target>
+
+    <target name="packages.dir.create" description="create directory for packages">
+        <echo>Making package directory...</echo>
+        <mkdir dir="${package.dir}"/>
+        <echo>Making of package directory done.</echo>
+    </target>
+
+    <target name="package.create" depends="packages.dir.create" description="create package for specified build">
+        <echo>Making JAR for ${target.platform}-${target.architecture}...</echo>
+        <jar destfile="${package.dir}/${jar.prefix}_${target.platform}-${target.architecture}-${version}.jar"
+             basedir="${output.dir}">
+            <restrict>
+                <archives>
+                    <zips>
+                        <fileset dir="lib" includes="*.jar"/>
+                        <fileset dir="lib/swt" includes="swt-${target.platform}-${target.architecture}.jar"/>
+                    </zips>
+                </archives>
+            </restrict>
+            <manifest>
+                <attribute name="Main-Class" value="swt.texteditor.simple.Bootstrap"/>
+            </manifest>
+        </jar>
+        <echo>Making of JAR for ${target.platform}-${target.architecture} done.</echo>
+    </target>
+
+</project>
