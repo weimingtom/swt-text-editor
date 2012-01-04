@@ -7,17 +7,17 @@ import org.eclipse.swt.widgets.Shell;
 
 public class HelpMenuAboutSelectionListener extends SelectionAdapter {
 
-    private final Shell shell;
+	private final Shell shell;
 
-    public HelpMenuAboutSelectionListener(Shell shell) {
-        this.shell = shell;
-    }
+	public HelpMenuAboutSelectionListener(final Shell shell) {
+		this.shell = shell;
+	}
 
-    @Override
-    public void widgetSelected(SelectionEvent selectionEvent) {
-        final MessageBox aboutDialog = new MessageBox(shell);
-        aboutDialog.setText("About dialog.");
-        aboutDialog.setMessage("Created by @Me");
-        aboutDialog.open();
-    }
+	@Override
+	public void widgetSelected(final SelectionEvent selectionEvent) {
+		final MessageBox aboutDialog = new MessageBox(shell);
+		aboutDialog.setText("About dialog.");
+		aboutDialog.setMessage("Created by @Me");
+		aboutDialog.open();
+	}
 }
