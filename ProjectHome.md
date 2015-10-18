@@ -1,0 +1,1 @@
+SWT based simple text editor
